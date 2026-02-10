@@ -18,7 +18,7 @@ class TourDetailsController extends Controller
     {
         $data = $this->tourDetailsService->getTourDetails($id);
 
-        if (!$data) {
+        if (!$data || $data['tour'] == "Not Found") {
             return response()->json([
                 'success' => false,
                 'error' => [

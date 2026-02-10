@@ -12,22 +12,28 @@ use Carbon\Carbon;
 
 class TourDetailsService
 {
-    public function getTour(int $tourId): ?Tour
+    public function getTour(int $tourId)
     {
-        return Tour::findOrFail($tourId);
+        $tour = Tour::find($tourId); 
+        if (!$tour) {
+            return "Not Found";
+        }
+        return $tour;
     }
 
     public function getSchedules(int $tourId): array
     {
-        $schedule = TourSchedule::where('tour_id', $tourId)->firstOrFail();
-
+        $schedule = TourSchedule::where('tour_id', $tourId)->first();
+        if (!$schedule) {
+            return [];
+        }
         $startDate = Carbon::parse($schedule->start_date)->startOfDay();
         $endDate   = Carbon::parse($schedule->end_date)->startOfDay();
 
         $periodDays = $startDate->diffInDays($endDate) + 1;
 
         return [
-             $schedule,
+            $schedule,
             'period_days' => $periodDays,
         ];
     }
@@ -44,9 +50,8 @@ class TourDetailsService
     public function getReviews(int $tourId)
     {
         $category_id = Category::where('key', "tour")->value('id');
-        $reviews = Review::where('category_id',$category_id)->where('item_id',$tourId)->get();
+        $reviews = Review::where('category_id', $category_id)->where('item_id', $tourId)->get();
         return $reviews;
-
     }
     public function getTourDetails(int $tourId): array
     {
