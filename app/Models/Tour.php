@@ -30,4 +30,19 @@ class Tour extends Model
     // {
     //     return $this->belongsTo(User::class, 'created_by');
     // }
+
+    public function tourPriceTier()
+    {
+        return $this->hasMany(TourPriceTier::class);
+    }
+
+    protected $appends = ['adult_price'];
+    protected $hidden = [
+        'tour_price_tier_min_adult_price',
+    ];
+
+    public function getAdultPriceAttribute()
+    {
+        return $this->tour_price_tier_min_adult_price;
+    }
 }
