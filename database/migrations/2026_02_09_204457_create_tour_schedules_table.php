@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreignId('price_tier_id')
                 ->constrained('tour_price_tiers')
                 ->cascadeOnDelete();
-
+            $table->text('best_time_visit');
             $table->timestamps();
         });
     }

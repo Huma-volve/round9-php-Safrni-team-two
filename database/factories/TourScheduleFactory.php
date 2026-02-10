@@ -25,6 +25,7 @@ class TourScheduleFactory extends Factory
             'capacity' => $capacity,
             'available_slots' => $capacity,
             'price_tier_id'=> 1, 
+            'best_time_visit'=> "Spring and Autumn are the best times to visit for pleasant weather and fewer crowds.",
         ];
     }
 }

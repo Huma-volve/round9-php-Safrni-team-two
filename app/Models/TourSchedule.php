@@ -16,6 +16,7 @@ class TourSchedule extends Model
         'capacity',
         'available_slots',
         'price_tier_id',
+        'best_time_visit',
     ];
 
     public function tour()

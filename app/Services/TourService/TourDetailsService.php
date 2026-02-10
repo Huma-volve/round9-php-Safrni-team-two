@@ -2,6 +2,8 @@
 
 namespace App\Services\TourService;
 
+use App\Models\Category;
+use App\Models\Review;
 use App\Models\Tour;
 use App\Models\TourActivity;
 use App\Models\TourPriceTier;
@@ -39,7 +41,13 @@ class TourDetailsService
     {
         return TourActivity::where('tour_id', $tourId)->get();
     }
+    public function getReviews(int $tourId)
+    {
+        $category_id = Category::where('key', "tour")->value('id');
+        $reviews = Review::where('category_id',$category_id)->where('item_id',$tourId)->get();
+        return $reviews;
 
+    }
     public function getTourDetails(int $tourId): array
     {
         return [
@@ -47,6 +55,7 @@ class TourDetailsService
             'schedule'   => $this->getSchedules($tourId),
             'price_tiers' => $this->getPriceTiers($tourId),
             'activities' => $this->getActivities($tourId),
+            'reviews' => $this->getReviews($tourId),
         ];
     }
 }
