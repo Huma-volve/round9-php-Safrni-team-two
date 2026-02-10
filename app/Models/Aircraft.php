@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Aircraft extends Model
 {
     use HasFactory;
-
+    protected $table = 'aircrafts';
     protected $fillable = [
         'model',
         'code',

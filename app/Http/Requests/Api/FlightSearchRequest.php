@@ -23,15 +23,15 @@ class FlightSearchRequest extends FormRequest
     {
         return [
             // Basic Search Criteria (Required)
-            'origin_id' => 'required|exists:airports,id|different:destination_id',
-            'destination_id' => 'required|exists:airports,id',
+            'origin_code' => 'required|string|exists:airports,airport_code|different:destination_code',
+            'destination_code' => 'required|string|exists:airports,airport_code',
             'date' => 'required|date|after_or_equal:today',
             'passengers' => 'sometimes|integer|min:1|max:9',
 
             // Filters (Optional)
             'class_type' => 'nullable|in:economy,business,first',
             'min_price' => 'nullable|numeric|min:0',
-            'max_price' => 'nullable|numeric|gt:min_price',
+            'max_price' => 'nullable|numeric' . ($this->filled('min_price') ? '|gte:min_price' : ''),
             'stops' => 'nullable|string', // comma-separated: 0,1,2+
             'carriers' => 'nullable|string', // comma-separated airline codes or names
             'min_departure_time' => 'nullable|date_format:H:i',

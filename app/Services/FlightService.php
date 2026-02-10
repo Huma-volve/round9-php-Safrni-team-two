@@ -17,8 +17,12 @@ class FlightService
     {
         $query = Flight::query()
             ->with(['origin', 'destination', 'aircraft', 'fares'])
-            ->where('origin_id', $data['origin_id'])
-            ->where('destination_id', $data['destination_id'])
+            ->whereHas('origin', function ($q) use ($data) {
+                $q->where('airport_code', $data['origin_code']);
+            })
+            ->whereHas('destination', function ($q) use ($data) {
+                $q->where('airport_code', $data['destination_code']);
+            })
             ->whereDate('departure_time', $data['date'])
             ->where('status', 'scheduled');
 
@@ -48,9 +52,14 @@ class FlightService
                   ->whereTime('departure_time', '<=', $data['max_departure_time']);
         }
 
-        // Filter by Fares related criteria (Price, Class, Stops)
-        if (isset($data['class_type']) || isset($data['min_price']) || isset($data['max_price']) || isset($data['stops'])) {
-            $query->whereHas('fares', function ($q) use ($data) {
+        // Filter by Fares related criteria (Price, Class, Stops, Available Seats)
+        $passengerCount = $data['passengers'] ?? 1;
+
+        if (isset($data['class_type']) || isset($data['min_price']) || isset($data['max_price']) || isset($data['stops']) || $passengerCount > 0) {
+            $query->whereHas('fares', function ($q) use ($data, $passengerCount) {
+                // Ensure enough seats are available for the requested passengers
+                $q->where('seats_available', '>=', $passengerCount);
+
                 if (isset($data['class_type'])) {
                     $q->where('class_type', $data['class_type']);
                 }
