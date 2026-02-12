@@ -30,7 +30,9 @@ class TourController extends Controller
                 $q->where('title', 'like', '%' . $request->search . '%');
             })
             ->withMin('tourPriceTier', 'adult_price')
+            ->withSum('schedules', 'available_slots')
             ->paginate(10);
+
 
         return response()->json([
             'success' => true,

@@ -16,8 +16,8 @@ class TourFavoriteController extends Controller
     {
         $category_id = Category::where('key', "tour")->value('id');
 
-        // $favorites = Favorite::where('user_id', Auth::id())->where('category_id',$category_id)->get();
-        $favorites = Favorite::where('user_id', 1)->where('category_id',$category_id)->get();  //test
+        $favorites = Favorite::where('user_id', Auth::id())->where('category_id',$category_id)->get();
+        // $favorites = Favorite::where('user_id', 1)->where('category_id',$category_id)->get();  //test
 
         return response()->json([
             'success' => true,
@@ -45,7 +45,7 @@ class TourFavoriteController extends Controller
         $category_id = Category::where('key', "tour")->value('id');
         $favorite = Favorite::updateOrCreate(
             [
-                'user_id'  => 1, //Auth::id()
+                'user_id'  =>  Auth::id(),
                 'category_id' => $category_id,
                 'item_id'  => $request->item_id
             ],
@@ -77,7 +77,7 @@ class TourFavoriteController extends Controller
         }
         $category_id = Category::where('key', "tour")->value('id');
 
-        $deleted = Favorite::where('user_id', 1) //Auth::id()
+        $deleted = Favorite::where('user_id', Auth::id()) //Auth::id()
             ->where('category_id', $category_id)
             ->where('item_id', $request->item_id)
             ->delete();

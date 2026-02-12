@@ -34,9 +34,9 @@ return new class extends Migration
 
             $table->boolean('recommended')->default(true);
 
-            // $table->foreignId('created_by')
-            //     ->constrained('users')
-            //     ->cascadeOnDelete();
+            $table->foreignId('created_by')
+                ->constrained('users')
+                ->cascadeOnDelete();
 
             $table->timestamps();
         });

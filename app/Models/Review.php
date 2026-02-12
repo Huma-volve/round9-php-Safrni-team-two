@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -17,7 +17,7 @@ class Review extends Model
         'title',
         'body',
         'photos_json',
-        //'status'
+        'status'
     ];
 
     protected $casts = [

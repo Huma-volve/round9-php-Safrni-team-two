@@ -14,7 +14,6 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->unsignedBigInteger('item_id');
             $table->timestamp('added_at')->useCurrent();
-            // $table->unique(['user_id', 'category', 'item_id']);
         });
     }
 

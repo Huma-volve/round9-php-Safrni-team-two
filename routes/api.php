@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\Tour\TourBookingController;
 use App\Http\Controllers\Api\Tour\TourController;
 use App\Http\Controllers\Api\Tour\TourDetailsController;
 use App\Http\Controllers\Api\Tour\TourFavoriteController;
+use App\Http\Controllers\Api\Tour\TourPaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,9 +18,25 @@ Route::get('/tours', [TourController::class, 'index']);
 Route::get('/tour/{id}', [TourDetailsController::class, 'show']);
 
 
-Route::get('/tours/favorites', [TourFavoriteController::class, 'index']);
+/* Route::middleware('auth:sanctum')->group(function () {
 
-Route::post('/tours/favorites', [TourFavoriteController::class, 'store']);
+    Route::get('/tours/favorites', [TourFavoriteController::class, 'index']);
 
-Route::delete('/tours/favorites', [TourFavoriteController::class, 'destroy']);
+    Route::post('/tours/favorites', [TourFavoriteController::class, 'store']);
 
+    Route::delete('/tours/favorites', [TourFavoriteController::class, 'destroy']);
+
+    Route::post('tours/{id}/check-availability', [TourBookingController::class, 'checkAvailability']);
+
+    Route::post('tours/{id}/booking', [TourBookingController::class, 'booking']);
+}); */
+    Route::get('/tours/favorites', [TourFavoriteController::class, 'index']);
+
+    Route::post('/tours/favorites', [TourFavoriteController::class, 'store']);
+
+    Route::delete('/tours/favorites', [TourFavoriteController::class, 'destroy']);
+
+    Route::post('tours/{id}/check-availability', [TourBookingController::class, 'checkAvailability']);
+
+    Route::post('tours/{id}/booking', [TourBookingController::class, 'booking']);
+    Route::get('tours/{id}/booking/show', [TourBookingController::class, 'show']);

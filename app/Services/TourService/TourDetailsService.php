@@ -14,7 +14,7 @@ class TourDetailsService
 {
     public function getTour(int $tourId)
     {
-        $tour = Tour::find($tourId); 
+        $tour = Tour::find($tourId);
         if (!$tour) {
             return "Not Found";
         }
