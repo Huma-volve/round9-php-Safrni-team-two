@@ -23,8 +23,8 @@ class FlightSearchRequest extends FormRequest
     {
         return [
             // Basic Search Criteria (Required)
-            'origin_code' => 'required|string|exists:airports,airport_code|different:destination_code',
-            'destination_code' => 'required|string|exists:airports,airport_code',
+            'origin_id' => 'required|integer|exists:airports,id|different:destination_id',
+            'destination_id' => 'required|integer|exists:airports,id',
             'date' => 'required|date|after_or_equal:today',
             'passengers' => 'sometimes|integer|min:1|max:9',
 

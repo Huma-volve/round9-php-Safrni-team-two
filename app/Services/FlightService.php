@@ -17,12 +17,8 @@ class FlightService
     {
         $query = Flight::query()
             ->with(['origin', 'destination', 'aircraft', 'fares'])
-            ->whereHas('origin', function ($q) use ($data) {
-                $q->where('airport_code', $data['origin_code']);
-            })
-            ->whereHas('destination', function ($q) use ($data) {
-                $q->where('airport_code', $data['destination_code']);
-            })
+            ->where('origin_id', $data['origin_id'])
+            ->where('destination_id', $data['destination_id'])
             ->whereDate('departure_time', $data['date'])
             ->where('status', 'scheduled');
 
@@ -97,27 +93,32 @@ class FlightService
      */
     public function compareFlights(array $flightIds)
     {
-        $flights = Flight::with(['origin', 'destination', 'aircraft', 'fares'])
+        return Flight::with(['origin', 'destination', 'aircraft', 'fares'])
             ->whereIn('id', $flightIds)
             ->get();
+    }
 
-        return $flights->map(function ($flight) {
-            $cheapestFare = $flight->fares->sortBy('base_price')->first();
-            return [
-                'id' => $flight->id,
-                'flight_number' => $flight->flight_number,
-                'carrier' => $flight->carrier,
-                'origin' => $flight->origin->city,
-                'destination' => $flight->destination->city,
-                'departure_time' => $flight->departure_time,
-                'arrival_time' => $flight->arrival_time,
-                'duration' => $flight->arrival_time->diffInMinutes($flight->departure_time),
-                'stops' => $cheapestFare ? $cheapestFare->stops : 0,
-                'price' => $cheapestFare ? $cheapestFare->base_price : null,
-                'baggage' => $cheapestFare ? $cheapestFare->baggage_price : 0,
-                'refundability' => $flight->refundability,
-                'aircraft' => $flight->aircraft->model,
-            ];
+    /**
+     * Get seat map for a specific flight with booking status.
+     *
+     * @param int $flightId
+     * @return \Illuminate\Support\Collection
+     */
+    public function getFlightSeats($flightId)
+    {
+        $flight = Flight::with(['aircraft.seats', 'tickets', 'fares'])->findOrFail($flightId);
+        
+        // Get IDs of seats that are already taken (ticketed)
+        $bookedSeatIds = $flight->tickets->pluck('seat_id')->filter()->toArray();
+
+        // Get flight base prices per class
+        $fares = $flight->fares->pluck('base_price', 'class_type');
+
+        return $flight->aircraft->seats->map(function ($seat) use ($bookedSeatIds, $fares) {
+            $seat->is_booked = in_array($seat->id, $bookedSeatIds) || $seat->status === 'blocked';
+            // Attach specific fare for this seat's class
+            $seat->price = $fares[$seat->class_type] ?? 0;
+            return $seat;
         });
     }
 }
