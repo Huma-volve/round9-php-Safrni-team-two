@@ -121,7 +121,7 @@ class TourBookingService
                 'status' => 'pending',
                 'payment_status' => 'unpaid',
                 'total_price' => $totalPrice,
-                'expires_at' => now()->addMinutes(10),
+                'expires_at' => now()->addMinutes(4), // expired time
             ]);
 
             $booking->details()->create([
