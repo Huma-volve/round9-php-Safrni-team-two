@@ -77,8 +77,7 @@ class TourBookingController extends Controller
     public function show($id)
     {
         $booking = Booking::where('category', 'tour')
-            ->where('item_id', $id)
-            ->where('user_id', auth()->id()) //auth()->id()
+            ->where('id', $id)
             ->first();
 
         if (!$booking) {

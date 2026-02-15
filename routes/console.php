@@ -11,4 +11,4 @@ Artisan::command('inspire', function () {
 
 
 Schedule::job(new ExpireTourBookingsJob)
-    ->everyMinute();
+    ->everyThreeMinutes();
