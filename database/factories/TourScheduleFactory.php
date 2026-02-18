@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Tour;
+use App\Models\TourPriceTier;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,12 +21,12 @@ class TourScheduleFactory extends Factory
         $capacity = $this->faker->numberBetween(10, 30);
 
         return [
-            'tour_id' => 1,
+            'tour_id' => Tour::inRandomOrder()->value('id'),
             'start_date' => now()->addDays(rand(1, 30)),
             'end_date' => now()->addDays(rand(31, 40)),
             'capacity' => $capacity,
             'available_slots' => $capacity,
-            'price_tier_id'=> 1, 
+            'price_tier_id'=> TourPriceTier::inRandomOrder()->value('id'),
             'best_time_visit'=> "Spring and Autumn are the best times to visit for pleasant weather and fewer crowds.",
         ];
     }

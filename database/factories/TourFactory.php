@@ -32,7 +32,7 @@ class TourFactory extends Factory
             'location' => $this->faker->city,
             'stars' => $this->faker->numberBetween(3, 5),
             'recommended' => $this->faker->boolean(30),
-            // 'created_by' => 1, // admin user
+            'created_by' => 1, // admin user
         ];
     }
 }

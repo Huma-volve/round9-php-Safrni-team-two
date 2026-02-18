@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tour;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,7 @@ class TourPriceTierFactory extends Factory
     public function definition(): array
     {
         return [
-            "tour_id" => 1,
+            "tour_id" => Tour::inRandomOrder()->value('id'),
             'name' => $this->faker->randomElement(['Standard', 'VIP', 'Premium']),
             'adult_price' => $this->faker->numberBetween(50, 200),
             'child_price' => $this->faker->numberBetween(20, 100),

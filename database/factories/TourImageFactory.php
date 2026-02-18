@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tour;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,7 @@ class TourImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'tour_id'=> 1,
+            'tour_id'=> Tour::inRandomOrder()->value('id'),
             'url' => 'tours/gallery/default.jpg',
             'caption' => $this->faker->sentence(4),
         ];
