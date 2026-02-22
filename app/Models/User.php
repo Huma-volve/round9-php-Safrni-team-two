@@ -56,6 +56,15 @@ class User extends Authenticatable
         ];
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
     public function getAvatarUrlAttribute()
     {
         return $this->avatar_path
