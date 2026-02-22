@@ -15,7 +15,22 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// =====================================================
+// Safarni Routes
+// =====================================================
+Route::prefix('safarni')->group(function () {
+    require __DIR__ . '/api/hotels.php';
+    require __DIR__ . '/api/rooms.php';
+    require __DIR__ . '/api/bookings.php';
+    require __DIR__ . '/api/reviews.php';
+    require __DIR__ . '/api/favorites.php';
+}); // ← الإغلاق هنا
+
+// =====================================================
+// V1 Auth Routes
+// =====================================================
 Route::prefix('v1')->group(function () {
+
     Route::prefix('auth')->group(function () {
         Route::post('register', [RegisterController::class, 'register']);
         Route::post('login', [LoginController::class, 'login']);
@@ -26,11 +41,9 @@ Route::prefix('v1')->group(function () {
         Route::post('forgot-password', [PasswordController::class, 'forgot']);
         Route::post('reset-password', [PasswordController::class, 'reset']);
 
-        // Google Routes
         Route::get('google/url', [GoogleAuthController::class, 'url']);
         Route::post('google/exchange', [GoogleAuthController::class, 'exchange']);
     });
-
 
     Route::middleware('auth:sanctum')->group(function () {
 
@@ -38,13 +51,10 @@ Route::prefix('v1')->group(function () {
             Route::post('logout', [LogoutController::class, 'logout']);
         });
 
-
-        // Profile routes
         Route::get('users/me', [ProfileController::class, 'show']);
         Route::post('users/me', [ProfileController::class, 'update']);
         Route::delete('users/me', [ProfileController::class, 'destroy']);
 
-        // Payments routes
         Route::post('payments/initiate', [PaymentsController::class, 'initiate']);
     });
 });
