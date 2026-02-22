@@ -22,9 +22,9 @@ class BookingService
      * @return Booking
      * @throws ValidationException
      */
-    public function createBooking(array $data, $userId = null)
+    public function createBooking(array $data, $user)
     {
-        return DB::transaction(function () use ($data, $userId) {
+        return DB::transaction(function () use ($data, $user) {
             $flight = Flight::with(['fares'])->findOrFail($data['flight_id']);
             $classType = $data['class_type'];
 
@@ -37,9 +37,9 @@ class BookingService
 
             // 2. Create Booking Record
             $booking = Booking::create([
-                'user_id' => $userId,
+                'user_id' => $user->id,
                 'booking_reference' => strtoupper(Str::random(8)), // Unique PNR
-                'contact_email' => $data['contact_email'],
+                'contact_email' => $user->email,
                 'contact_phone' => $data['contact_phone'],
                 'total_price' => 0, // Will calculate below
                 'tax_amount' => 0,

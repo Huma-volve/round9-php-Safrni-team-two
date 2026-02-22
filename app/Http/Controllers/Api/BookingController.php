@@ -8,6 +8,7 @@ use App\Http\Resources\BookingResource;
 use App\Services\BookingService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -30,9 +31,8 @@ class BookingController extends Controller
     {
         try {
             // Pass authenticated user ID if logged in
-            $userId = $request->user() ? $request->user()->id : null;
-
-            $booking = $this->bookingService->createBooking($request->validated(), $userId);
+            $user = Auth::user();
+            $booking = $this->bookingService->createBooking($request->validated(), $user);
 
             return $this->successResponse(new BookingResource($booking), 'Booking created successfully', 201);
         } catch (\Exception $e) {

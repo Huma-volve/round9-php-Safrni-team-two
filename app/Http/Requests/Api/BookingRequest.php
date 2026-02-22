@@ -23,7 +23,6 @@ class BookingRequest extends FormRequest
     {
         return [
             'flight_id' => 'required|exists:flights,id',
-            'contact_email' => 'required|email|max:255',
             'contact_phone' => 'required|string|max:20',
 
             // Passengers Details
