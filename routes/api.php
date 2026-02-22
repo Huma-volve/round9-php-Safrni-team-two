@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\V1\Auth\OtpController;
 use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\GoogleAuthController;
+use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\V1\Payments\PaymentsController;
 use App\Http\Controllers\Api\V1\Profile\ProfileController;
 
@@ -63,9 +65,17 @@ Route::prefix('v1')->group(function () {
 
         Route::post('payments/initiate', [PaymentsController::class, 'initiate']);
     });
- 
 });
 
+Route::post('bookings/', [BookingController::class, 'store'])->name('bookings.store')->middleware('auth:sanctum');
+
+// Flight Public Routes
+Route::prefix('flights')->group(function () {
+    Route::get('/search', [FlightController::class, 'search'])->name('flights.search');
+    Route::get('/compare', [FlightController::class, 'compare'])->name('flights.compare');
+    Route::get('/{id}', [FlightController::class, 'show'])->name('flights.show');
+    Route::get('/{id}/seats', [FlightController::class, 'getSeats'])->name('flights.seats');
+});
 
 
 //       TOUR 
@@ -87,5 +97,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('tours/{id}/booking', [TourBookingController::class, 'booking']);
 
     Route::get('tours/{id}/booking/show', [TourBookingController::class, 'show']);
- });
- 
+});

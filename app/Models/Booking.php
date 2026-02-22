@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Booking extends Model
@@ -40,6 +41,22 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function passengers()
+    {
+        return $this->hasMany(Passenger::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    // Usually a booking is for one flight, but it could be multi-leg.
+    // For simplicity, we can get flights via tickets.
+    public function flights()
+    {
+        return $this->hasManyThrough(Flight::class, Ticket::class, 'booking_id', 'id', 'id', 'flight_id')->distinct();
+    }
     public function getPayableAmount(): float
     {
         return (float) $this->total_price;
