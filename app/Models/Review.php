@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+
+
 class Review extends Model
 {
     use HasFactory, SoftDeletes;
@@ -18,13 +20,16 @@ class Review extends Model
         'reviewable_type',
         'booking_id',
         'rating',
-        'title',
-        'body',
         'photos',
         'helpful_votes',
         'status',
         'rejection_reason',
         'approved_at',
+        'category',
+        'item_id',
+        'title',
+        'body',
+        'photos_json',
     ];
 
     protected $casts = [
@@ -72,7 +77,7 @@ class Review extends Model
     public function scopeForEntity($query, string $type, int $id)
     {
         return $query->where('reviewable_type', $type)
-                     ->where('reviewable_id', $id);
+            ->where('reviewable_id', $id);
     }
 
     // =====================================================
