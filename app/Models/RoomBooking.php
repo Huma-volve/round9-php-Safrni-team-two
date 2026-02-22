@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\Payable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class RoomBooking extends Model
+class RoomBooking extends Model implements Payable
 {
     use HasFactory, SoftDeletes;
 
@@ -40,16 +41,16 @@ class RoomBooking extends Model
     ];
 
     protected $casts = [
-        'check_in'       => 'date',
-        'check_out'      => 'date',
-        'cancelled_at'   => 'datetime',
-        'guest_info'     => 'array',
-        'extras'         => 'array',
+        'check_in'        => 'date',
+        'check_out'       => 'date',
+        'cancelled_at'    => 'datetime',
+        'guest_info'      => 'array',
+        'extras'          => 'array',
         'price_per_night' => 'decimal:2',
-        'subtotal'       => 'decimal:2',
-        'tax_amount'     => 'decimal:2',
-        'service_fee'    => 'decimal:2',
-        'total_amount'   => 'decimal:2',
+        'subtotal'        => 'decimal:2',
+        'tax_amount'      => 'decimal:2',
+        'service_fee'     => 'decimal:2',
+        'total_amount'    => 'decimal:2',
     ];
 
     // =====================================================
@@ -105,26 +106,17 @@ class RoomBooking extends Model
     // Business Logic
     // =====================================================
 
-    /**
-     * هل يمكن إلغاء الحجز؟
-     */
     public function isCancellable(): bool
     {
         return in_array($this->status, ['pending', 'confirmed'])
             && $this->check_in->isFuture();
     }
 
-    /**
-     * هل المستخدم أكمل الإقامة؟ (يقدر يعمل review)
-     */
     public function isCompleted(): bool
     {
         return $this->status === 'completed';
     }
 
-    /**
-     * توليد booking reference فريد
-     */
     public static function generateReference(): string
     {
         do {
@@ -132,5 +124,22 @@ class RoomBooking extends Model
         } while (self::where('booking_reference', $ref)->exists());
 
         return $ref;
+    }
+
+    // =====================================================
+    // Payable Interface
+    // =====================================================
+
+    public function getPayableAmount(): float
+    {
+        return (float) $this->total_amount;
+    }
+
+    public function markAsPaid(): void
+    {
+        $this->update([
+            'payment_status' => 'paid',
+            'status'         => 'confirmed',
+        ]);
     }
 }

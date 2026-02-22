@@ -2,13 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ReviewController;
-use App\Http\Controllers\Api\Admin\ReviewController as AdminReviewController;
 
 // Public: عرض الريفيوز
 Route::get('/{type}/{id}/reviews', [ReviewController::class, 'index']);
 
-// User Routes
-Route::group(function () {
+// Protected: إضافة / حذف
+Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reviews',              [ReviewController::class, 'store']);
     Route::delete('/reviews/{id}',       [ReviewController::class, 'destroy']);
     Route::post('/reviews/{id}/helpful', [ReviewController::class, 'markHelpful']);
