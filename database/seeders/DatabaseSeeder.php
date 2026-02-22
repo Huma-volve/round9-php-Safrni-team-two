@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
         User::factory(10)->create();
 
         User::factory()->create([
@@ -28,7 +29,13 @@ class DatabaseSeeder extends Seeder
         $this->call(TourImageSeeder::class);
         $this->call(TourActivitySeeder::class);
         $this->call(CategorySeeder::class);
-        $this->call(ReviewSeeder::class);  
-        $this->call(FavoriteSeeder::class); 
+        $this->call(ReviewSeeder::class);
+        $this->call(FavoriteSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(HotelSeeder::class);
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
     }
 }

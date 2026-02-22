@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
 class Favorite extends Model
 {
     use HasFactory;
+
 
     public $timestamps = false;
 
@@ -16,10 +20,39 @@ class Favorite extends Model
         'category_id',
         'item_id',
         'added_at',
+        'favoriteable_id',
+        'favoriteable_type',
     ];
 
-    public function user()
+
+    // =====================================================
+    // Relationships
+    // =====================================================
+
+    /**
+     * Polymorphic: Hotel, Room, Tour, Car, Flight
+     */
+    public function favoriteable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    // =====================================================
+    // Scopes
+    // =====================================================
+
+    public function scopeForUser($query, int $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    public function scopeOfType($query, string $type)
+    {
+        return $query->where('favoriteable_type', $type);
     }
 }
