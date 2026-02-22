@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\V1\Auth\OtpController;
 use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\GoogleAuthController;
-
+use App\Http\Controllers\Api\V1\Payments\PaymentsController;
 use App\Http\Controllers\Api\V1\Profile\ProfileController;
 
 use Illuminate\Http\Request;
@@ -46,10 +46,12 @@ Route::prefix('v1')->group(function () {
 
 
         // Profile routes
-
         Route::get('users/me', [ProfileController::class, 'show']);
         Route::post('users/me', [ProfileController::class, 'update']);
         Route::delete('users/me', [ProfileController::class, 'destroy']);
+
+        // Payments routes
+        Route::post('payments/initiate', [PaymentsController::class, 'initiate']);
     });
 });
 
