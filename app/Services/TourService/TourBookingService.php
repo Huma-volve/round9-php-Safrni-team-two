@@ -2,6 +2,7 @@
 
 namespace App\Services\TourService;
 
+use App\Contracts\Payable;
 use App\Jobs\ExpireTourBookingsJob;
 use App\Models\Booking;
 use App\Models\BookingDetail;
@@ -115,7 +116,7 @@ class TourBookingService
                 $infant * $priceTier->infant_price;
 
             $booking = Booking::create([
-                'user_id' => auth()->id(), 
+                'user_id' => auth()->id(),
                 'category' => 'tour',
                 'item_id' => $tour->id,
                 'status' => 'pending',

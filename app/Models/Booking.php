@@ -29,14 +29,28 @@ class Booking extends Model
     {
         return $this->hasOne(BookingDetail::class);
     }
-     public function detail()
+    public function detail()
     {
         return $this->belongsTo(BookingDetail::class);
     }
 
- 
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getPayableAmount(): float
+    {
+        return (float) $this->total_price;
+    }
+
+    // Mark booking as paid
+    public function markAsPaid(): void
+    {
+        $this->update([
+            'status' => $this->status,
+            'payment_status' => $this->payment_status,
+        ]);
     }
 }

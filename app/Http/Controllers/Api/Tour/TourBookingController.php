@@ -60,6 +60,9 @@ class TourBookingController extends Controller
                     'booking_id' => $booking->id,
                     'status' => $booking->status,
                     'total_price' => $booking->total_price,
+                    'markAsPaid' => $booking->payment_status,
+                    'getPayableAmount' => $booking->getPayableAmount(),
+
                     'message' => 'Booking created. Proceed to payment.',
                 ],
             ]);
