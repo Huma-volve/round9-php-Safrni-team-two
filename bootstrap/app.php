@@ -24,19 +24,23 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
+    ->withProviders([
+        App\Providers\RepositoryServiceProvider::class,
+    ])
     ->withMiddleware(function (Middleware $middleware): void {
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+
         // 401
         $exceptions->render(function (AuthenticationException $e, $request) {
             if ($request->expectsJson()) {
                 return (new ResponseHelper())->error(ApiErrorCode::UNAUTHORIZED, 'Unauthenticated.', null, 401);
             }
-            return null; // Let Laravel handle it for non-API requests
+            return null;
         });
 
-        //403
+        // 403
         $exceptions->render(function (AuthorizationException $e, $request) {
             if ($request->expectsJson()) {
                 return (new ResponseHelper())->error(ApiErrorCode::FORBIDDEN, 'Forbidden.', null, 403);
@@ -68,12 +72,12 @@ return Application::configure(basePath: dirname(__DIR__))
             return null;
         });
 
-        // If any validation exceptions are not handled by FormRequest, handle them here
+        // 422
         $exceptions->render(function (ValidationException $e, $request) {
             if ($request->expectsJson()) {
                 return (new ResponseHelper())->error(ApiErrorCode::VALIDATION, 'Validation error.', $e->errors(), 422);
             }
             return null;
         });
-    })
-    ->create();
+
+    })->create();
