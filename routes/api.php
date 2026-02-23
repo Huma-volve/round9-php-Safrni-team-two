@@ -16,7 +16,12 @@ use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\V1\Payments\PaymentsController;
 use App\Http\Controllers\Api\V1\Profile\ProfileController;
 
+use App\Http\Controllers\Cars\BookingController as CarBookingController;
+use App\Http\Controllers\Cars\CarController;
+use App\Http\Controllers\Cars\CarFavouriteController;
+use App\Http\Controllers\Cars\CarReviewController;
 use Illuminate\Http\Request;
+use Illuminate\Queue\Connectors\FailoverConnector;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
@@ -97,4 +102,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('tours/{id}/booking', [TourBookingController::class, 'booking']);
 
     Route::get('tours/{id}/booking/show', [TourBookingController::class, 'show']);
+});
+
+Route::prefix('cars')->group(function () {
+
+    Route::get('/', [CarController::class, 'index']);
+    Route::get('{car}', [CarController::class, 'show']);
+    Route::post('compare', [CarController::class, 'compare']);
+    Route::get('{car}/pricing', [CarBookingController::class, 'calculatePricing']);
+    Route::post('bookings/calculate', [CarBookingController::class, 'calculateTotal']);
+    Route::post('bookings', [CarBookingController::class, 'store']);
+
+    // review routes
+    Route::get('/cars/{car}/reviews', [CarReviewController::class, 'index']);
+    Route::post('/reviews', [CarReviewController::class, 'store']);
+
+    // fav routes 
+    Route::get('/favorites', [CarFavouriteController::class, 'index']);
+    Route::post('/favorites', [CarFavouriteController::class, 'store']);
+    Route::delete('/favorites/{carId}', [CarFavouriteController::class, 'destroy']);
 });

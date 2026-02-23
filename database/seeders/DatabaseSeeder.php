@@ -2,6 +2,13 @@
 
 namespace Database\Seeders;
 
+<<<<<<< HEAD
+=======
+use App\Models\Brand;
+use App\Models\Car;
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+>>>>>>> 2a193c7 (feat: car booking)
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -30,6 +37,7 @@ class DatabaseSeeder extends Seeder
 >>>>>>> 0f192b0e788d514cd46aa7deb40e569a60a4a995
         ]);
 
+<<<<<<< HEAD
         $this->call(TourSeeder::class);
         $this->call(TourPriceTierSeeder::class);
         $this->call(TourScheduleSeeder::class);
@@ -44,5 +52,9 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+=======
+            Brand::factory(10)->create();
+            Car::factory(20)->create();
+>>>>>>> 2a193c7 (feat: car booking)
     }
 }
