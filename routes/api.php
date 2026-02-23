@@ -86,6 +86,18 @@ Route::get('/tour/{id}', [TourDetailsController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
+/*     Route::get('/tours/favorites', [TourFavoriteController::class, 'index']);
+
+    Route::post('/tours/favorites', [TourFavoriteController::class, 'store']);
+
+    Route::delete('/tours/favorites', [TourFavoriteController::class, 'destroy']);
+
+    Route::post('tours/{id}/check-availability', [TourBookingController::class, 'checkAvailability']);
+
+    Route::post('tours/{id}/booking', [TourBookingController::class, 'booking']);
+
+    Route::get('tours/{id}/booking/show', [TourBookingController::class, 'show']); */
+});
     Route::get('/tours/favorites', [TourFavoriteController::class, 'index']);
 
     Route::post('/tours/favorites', [TourFavoriteController::class, 'store']);
@@ -97,4 +109,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('tours/{id}/booking', [TourBookingController::class, 'booking']);
 
     Route::get('tours/{id}/booking/show', [TourBookingController::class, 'show']);
-});

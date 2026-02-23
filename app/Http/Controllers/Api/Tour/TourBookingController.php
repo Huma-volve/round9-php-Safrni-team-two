@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tour\CheckAvailableRequest;
 use App\Http\Requests\Api\Tour\TourBookingRequest;
 use App\Models\Booking;
+use App\Models\BookingTour;
 use App\Models\Tour;
 use App\Services\TourService\TourBookingService;
 use Illuminate\Http\JsonResponse;
@@ -79,7 +80,7 @@ class TourBookingController extends Controller
 
     public function show($id)
     {
-        $booking = Booking::where('category', 'tour')
+        $booking = BookingTour::where('category', 'tour')
             ->where('id', $id)
             ->first();
 

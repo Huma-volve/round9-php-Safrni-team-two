@@ -2,14 +2,9 @@
 
 namespace Database\Seeders;
 
-<<<<<<< HEAD
 use App\Models\Flight;
 use App\Models\Review;
 use App\Models\User;
-=======
-use App\Models\Review;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
->>>>>>> 0f192b0e788d514cd46aa7deb40e569a60a4a995
 use Illuminate\Database\Seeder;
 
 class ReviewSeeder extends Seeder
@@ -19,7 +14,6 @@ class ReviewSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<< HEAD
         // Ensure we have a user
         $user = User::first();
         if (!$user) {
@@ -40,8 +34,5 @@ class ReviewSeeder extends Seeder
                 'comment' => 'Great flight experience!',
             ]);
         }
-=======
-        Review::factory()->count(20)->create();
->>>>>>> 0f192b0e788d514cd46aa7deb40e569a60a4a995
     }
 }
