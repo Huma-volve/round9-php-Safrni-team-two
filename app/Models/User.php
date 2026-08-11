@@ -76,4 +76,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(SocialIdentity::class);
     }
+    public function favorites()
+    {
+        return $this->hasMany(CarFavourire::class);
+    }
 }
