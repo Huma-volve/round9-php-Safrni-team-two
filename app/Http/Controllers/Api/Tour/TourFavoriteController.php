@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Tour;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Favorite;
+use App\Models\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +15,9 @@ class TourFavoriteController extends Controller
     // List favorites for the logged-in user
     public function index(Request $request)
     {
-        $category_id = Category::where('key', "tour")->value('id');
-
-        $favorites = Favorite::where('user_id', Auth::id())->where('category_id',$category_id)->get();
-        // $favorites = Favorite::where('user_id', 1)->where('category_id',$category_id)->get();  //test
+        $favorites = Favorite::where('user_id', Auth::id())
+            ->where('favoriteable_type', Tour::class)  // فقط tours
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -29,8 +29,8 @@ class TourFavoriteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-              'item_id'  => 'required|integer',
-         ]);
+            'item_id'  => 'required|integer|exists:tours,id',
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
@@ -42,14 +42,14 @@ class TourFavoriteController extends Controller
                 ]
             ], 422);
         }
-        $category_id = Category::where('key', "tour")->value('id');
+
         $favorite = Favorite::updateOrCreate(
             [
-                'user_id'  =>  Auth::id(),
-                'category_id' => $category_id,
-                'item_id'  => $request->item_id
+                'user_id' => Auth::id(),
+                'favoriteable_type' => Tour::class,
+                'favoriteable_id' => $request->item_id
             ],
-            ['added_at' => now()]
+            ['created_at' => now(), 'updated_at' => now()]
         );
 
         return response()->json([
@@ -62,7 +62,7 @@ class TourFavoriteController extends Controller
     public function destroy(Request $request)
     {
         $validator = Validator::make($request->all(), [
-             'item_id'  => 'required|integer',
+            'item_id'  => 'required|integer|exists:tours,id',
         ]);
 
         if ($validator->fails()) {
@@ -75,11 +75,10 @@ class TourFavoriteController extends Controller
                 ]
             ], 422);
         }
-        $category_id = Category::where('key', "tour")->value('id');
 
-        $deleted = Favorite::where('user_id', Auth::id()) //Auth::id()
-            ->where('category_id', $category_id)
-            ->where('item_id', $request->item_id)
+        $deleted = Favorite::where('user_id', Auth::id())
+            ->where('favoriteable_type', Tour::class)
+            ->where('favoriteable_id', $request->item_id)
             ->delete();
 
         return response()->json([

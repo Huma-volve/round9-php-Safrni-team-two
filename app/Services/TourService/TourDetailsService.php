@@ -49,9 +49,10 @@ class TourDetailsService
     }
     public function getReviews(int $tourId)
     {
-        $category_id = Category::where('key', "tour")->value('id');
-        $reviews = Review::where('category_id', $category_id)->where('item_id', $tourId)->get();
-        return $reviews;
+        return Review::where('reviewable_type', Tour::class)
+            ->where('reviewable_id', $tourId)
+            ->where('status', 'approved')
+            ->get();
     }
     public function getTourDetails(int $tourId): array
     {

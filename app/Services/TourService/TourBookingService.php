@@ -6,6 +6,7 @@ use App\Contracts\Payable;
 use App\Jobs\ExpireTourBookingsJob;
 use App\Models\Booking;
 use App\Models\BookingDetail;
+use App\Models\BookingTour;
 use App\Models\Payment;
 use App\Models\TourPriceTier;
 use App\Models\TourSchedule;
@@ -81,7 +82,7 @@ class TourBookingService
 
 
 
-    public function createTourBooking($request, $tour): Booking
+    public function createTourBooking($request, $tour): BookingTour
     {
         $adult = (int) $request->adult;
         $child = (int) ($request->child ?? 0);
@@ -115,7 +116,7 @@ class TourBookingService
                 $child * $priceTier->child_price +
                 $infant * $priceTier->infant_price;
 
-            $booking = Booking::create([
+            $booking = BookingTour::create([
                 'user_id' => auth()->id(),
                 'category' => 'tour',
                 'item_id' => $tour->id,
